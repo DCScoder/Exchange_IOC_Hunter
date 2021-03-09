@@ -17,4 +17,4 @@ powershell Exchange_IOC_Hunter.ps1
 
 #### Updates:
 
-*This repository will be updated with new IOC's shortly.
+*This repository will be updated with new IOC's shortly.*
