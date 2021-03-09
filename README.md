@@ -12,7 +12,7 @@ Hunt for IOCs in IIS Logs - CVE-2021-26855, CVE-2021-26857, CVE-2021-26858, CVE-
 #### Usage:
 
 ```
-powershell Exchange_IOC_Hunter.ps1
+powershell .\Exchange_IOC_Hunter.ps1
 ```
 
 #### Updates:
