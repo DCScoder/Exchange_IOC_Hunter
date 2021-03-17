@@ -1,7 +1,7 @@
 ###################################################################################
 #
 #    Script:    Exchange_IOC_Hunter.ps1
-#    Version:   1.3
+#    Version:   1.4
 #    Author:    Dan Saunders
 #    Contact:   dcscoder@gmail.com
 #    Purpose:   Hunt for IOCs in IIS Logs - CVE-2021-26855, CVE-2021-26857, CVE-2021-26858, CVE-2021-27065
@@ -24,7 +24,7 @@
 ###################################################################################
 
 $script = "Exchange_IOC_Hunter"
-$version = "v1.3"
+$version = "v1.4"
 
 # IOC - IP Address
 $ips = "103.77.192.219","104.140.114.110","104.248.49.97","104.250.191.110","107.173.83.123","108.61.246.56","125.70.170.26",
@@ -61,6 +61,7 @@ Write-Host "`nHunting for potential malicious Remote Code Execution (RCE)..." -F
 New-Item $dst\$dir\RCE -ItemType Directory | Out-Null
 New-Item $dst\$dir\RCE\Strings -ItemType Directory | Out-Null
 findstr /S /snip /c:"/ecp/DDI/DDIService.svc/SetObject" "$src\*.log" > $dst\$dir\RCE\Strings\DDIService_svc_SetObject.txt
+findstr /S /snip /c:"/ecp/DDI/DDIService.svc/GetList" "$src\*.log" > $dst\$dir\RCE\Strings\DDIService_svc_GetList.txt
 findstr /S /snip /c:"ResetOABVirtualDirectory" "$src\*.log" > $dst\$dir\RCE\Strings\ResetOABVirtualDirectory.txt
 
 # JavaScript
@@ -69,6 +70,7 @@ New-Item $dst\$dir\Files -ItemType Directory | Out-Null
 New-Item $dst\$dir\Files\JavaScript -ItemType Directory | Out-Null
 findstr /S /snip /c:"/x.js" "$src\*.log" > $dst\$dir\Files\JavaScript\x.txt
 findstr /S /snip /c:"/y.js" "$src\*.log" > $dst\$dir\Files\JavaScript\y.txt
+findstr /S /snip /c:"/program.js" "$src\*.log" > $dst\$dir\Files\JavaScript\program.txt
 
 # HTTP POST
 Write-Host "`nHunting for potential malicious HTTP POST requests (themes file path only)..." -ForegroundColor yellow -BackgroundColor black
@@ -76,7 +78,7 @@ New-Item $dst\$dir\Files\Strings -ItemType Directory | Out-Null
 findstr /S /snip /c:"POST /owa/auth/Current/themes/resources" "$src\*.log" > $dst\$dir\Files\Strings\owa_auth_current_themes_resources.txt
 
 # Discovery
-Write-Host "`nHunting for potential malicious Discovery cmdline..." -ForegroundColor yellow -BackgroundColor black
+Write-Host "`nHunting for potential Discovery cmdline..." -ForegroundColor yellow -BackgroundColor black
 New-Item $dst\$dir\Discovery -ItemType Directory | Out-Null
 findstr /S /snip /c:"whoami" "$src\*.log" > $dst\$dir\Discovery\Discovery.txt
 findstr /S /snip /c:"ipconfig" "$src\*.log" >> $dst\$dir\Discovery\Discovery.txt
